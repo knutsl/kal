@@ -66,6 +66,7 @@ public class Login extends JFrame implements ActionListener {
 	}
 
 	public String getBruker() {
+		bruker = bruker.substring(0, 1).toUpperCase() + bruker.substring(1).toLowerCase();
 		return bruker;
 	}
 
