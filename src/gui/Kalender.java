@@ -86,7 +86,9 @@ public class Kalender extends JPanel implements ActionListener {
 					knapper.add(tom);
 				} else {
 					JButton dagbut = new JButton(Integer.toString(day));
-					if (cl.harAvtale(day, maaned, aar)){
+					if(cl.kommerTilAvtale(day, maaned, aar)) {
+						dagbut.setBackground(Color.GREEN);
+					} else if (cl.harAvtale(day, maaned, aar)){
 						dagbut.setBackground(Color.CYAN);
 					} else if (cl.harAnsattAvtale(day, maaned, aar)) {
 						dagbut.setBackground(Color.ORANGE);

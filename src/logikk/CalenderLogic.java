@@ -146,29 +146,29 @@ public class CalenderLogic {
 		String monthString;
 
 		switch (month) {
-		case 1:  monthString = "January";
+		case 1:  monthString = "Januar";
 		break;
-		case 2:  monthString = "February";
+		case 2:  monthString = "Februar";
 		break;
-		case 3:  monthString = "March";
+		case 3:  monthString = "Mars";
 		break;
 		case 4:  monthString = "April";
 		break;
-		case 5:  monthString = "May";
+		case 5:  monthString = "Mai";
 		break;
-		case 6:  monthString = "June";
+		case 6:  monthString = "Juni";
 		break;
-		case 7:  monthString = "July";
+		case 7:  monthString = "Juli";
 		break;
 		case 8:  monthString = "August";
 		break;
 		case 9:  monthString = "September";
 		break;
-		case 10: monthString = "October";
+		case 10: monthString = "Oktober";
 		break;
 		case 11: monthString = "November";
 		break;
-		case 12: monthString = "December";
+		case 12: monthString = "Desember";
 		break;
 		default: monthString = "Invalid month";
 		break;
@@ -214,7 +214,7 @@ public class CalenderLogic {
 				if (rs.getString(6) == null){
 					temp.set(count, temp.get(count) + rs.getString(7) + ".");
 				} else {
-					temp.set(count, temp.get(count) + "romnr " + rs.getInt(6) + ".");
+					temp.set(count, temp.get(count) + "Rom " + rs.getInt(6) + ".");
 				}
 				if (rs.getString(8) == null){
 					temp.set(count, temp.get(count) + " Du har ikke svart på invitasjonen.");
@@ -260,7 +260,7 @@ public class CalenderLogic {
 					if (rs.getString(6) == null){
 						temp.set(count, temp.get(count) + rs.getString(7) + ". ");
 					} else {
-						temp.set(count, temp.get(count) +"romnr "+ rs.getInt(6) + ". ");
+						temp.set(count, temp.get(count) +"Rom "+ rs.getInt(6) + ". ");
 					}
 				}
 				if (rs.getString(8) == null){
@@ -272,7 +272,7 @@ public class CalenderLogic {
 				}
 			}
 			for (int i = 0; i < temp.size(); i++){
-				temp.set(i, temp.get(i) + ja.get(i) +" har svart ja, "+nei.get(i)+" har svart nei, "+ ikkesvart.get(i)+"har ikke svart.");
+				temp.set(i, temp.get(i) + ja.get(i) +" har svart ja, "+nei.get(i)+" har svart nei, "+ ikkesvart.get(i)+" har ikke svart.");
 			}
 			
 		} catch (SQLException e) {
@@ -320,6 +320,24 @@ public class CalenderLogic {
 
 	public boolean harAnsattAvtale(int day, int maaned, int aar) {
 		ResultSet rs = db.readQuery("SELECT count(avtaleid) FROM avtale WHERE dato = '"+datoAsString(day, maaned, aar)+"'");
+		int count = 0;
+		try {
+			rs.next();
+			count = rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (count > 0) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public boolean kommerTilAvtale(int day, int maaned, int aar) {
+		ResultSet rs = db.readQuery("SELECT count(avtaleid) FROM avtale NATURAL JOIN erinviterttil"
+				+ " WHERE dato = '"+datoAsString(day, maaned, aar)+"' AND brukernavn = '"+this.bruker+"' "
+						+ "AND kommer = 1");
 		int count = 0;
 		try {
 			rs.next();
