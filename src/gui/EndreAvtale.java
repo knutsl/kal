@@ -13,7 +13,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -45,6 +48,29 @@ public class EndreAvtale extends JPanel implements ActionListener{
 	JPanel avtaleliste;
 	String[] avtaler;
 	AvtaleLogic al;
+	DocumentListener dl = new DocumentListener() {
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			warn();
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			warn();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			warn();
+		}
+
+		private void warn() {
+			textField5.setText("");
+			Component c = null;
+			JOptionPane.showMessageDialog(c, "Dato eller tidspunkt endret, velg nytt rom!", "Advarsel", JOptionPane.INFORMATION_MESSAGE);
+		}
+	};
 
 	public EndreAvtale(String bruker, AvtaleLogic al) {
 		eal = new EndreAvtaleLogic();
@@ -68,6 +94,8 @@ public class EndreAvtale extends JPanel implements ActionListener{
 		l1.setLabelFor(textField1);
 		tekstbokser.add(textField1);
 		textField1.addActionListener(this); 
+		textField1.getDocument().addDocumentListener(dl);
+
 
 		// Starttid
 		JLabel l2 = new JLabel(labels[2], JLabel.TRAILING);
@@ -76,6 +104,8 @@ public class EndreAvtale extends JPanel implements ActionListener{
 		l2.setLabelFor(textField2);
 		tekstbokser.add(textField2);
 		textField2.addActionListener(this); 
+		textField2.getDocument().addDocumentListener(dl);
+
 
 		// Sluttid
 		JLabel l3 = new JLabel(labels[3], JLabel.TRAILING);
@@ -84,6 +114,8 @@ public class EndreAvtale extends JPanel implements ActionListener{
 		l3.setLabelFor(textField3);
 		tekstbokser.add(textField3);
 		textField3.addActionListener(this); 
+		textField3.getDocument().addDocumentListener(dl);
+
 
 		// Beskrivelse
 		JLabel l4 = new JLabel(labels[4], JLabel.TRAILING);
@@ -121,6 +153,7 @@ public class EndreAvtale extends JPanel implements ActionListener{
 		JLabel l7 = new JLabel(labels[7], JLabel.TRAILING);
 		tekstbokser.add(l7);
 		textField7 = new JTextField(10);
+		textField7.setEditable(false);
 		l7.setLabelFor(textField7);
 		tekstbokser.add(textField7);
 		textField7.addActionListener(this);
@@ -159,18 +192,21 @@ public class EndreAvtale extends JPanel implements ActionListener{
 	}
 
 	private void createDlist() {
-		String[] s = al.getAnsatte(bruker);
+		final String[] s = al.getAnsatte(bruker);
 
 		dlist = new JList(s);
+		dlist.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		JScrollPane listScroller = new JScrollPane(dlist);
 		listScroller.setPreferredSize(new Dimension(300, 100));
 		avtaleliste.add(listScroller);
-
 		dlist.addListSelectionListener(new ListSelectionListener() {
+			String str = null;
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting() && !al.textContains(textField7.getText(), dlist.getSelectedValue().toString())) {
+				if(dlist.getSelectedValue() == null) {
+					return;
+				} else if (!e.getValueIsAdjusting() && !al.textContains(textField7.getText(), dlist.getSelectedValue().toString())) {
 					textField7.setText(textField7.getText() + dlist.getSelectedValue().toString() + ", ");
 					if(!textField5.getText().equals("")){
 						if(al.sjekkPlass(textField5.getText(), textField7.getText().split(", ").length)) {
@@ -179,6 +215,11 @@ public class EndreAvtale extends JPanel implements ActionListener{
 							JOptionPane.showMessageDialog(c,"For mange deltagere, velg et annet rom !","Feil",JOptionPane.WARNING_MESSAGE);
 						}
 					}
+					dlist.removeSelectionInterval(0, s.length);
+				} else if (!e.getValueIsAdjusting() && al.textContains(textField7.getText(), dlist.getSelectedValue().toString())) {
+					str = textField7.getText().replace(dlist.getSelectedValue().toString() + ", ", "");
+					textField7.setText(str);
+					dlist.removeSelectionInterval(0, s.length);
 				}
 			}
 
@@ -279,5 +320,5 @@ public class EndreAvtale extends JPanel implements ActionListener{
 		String[] deltakere = textField7.getText().split(", ");
 		eal.slettAvtale(avtaleid, this.bruker, deltakere, al);
 	}
-
 }
+

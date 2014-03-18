@@ -18,6 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -41,6 +43,30 @@ public class Avtale extends JPanel implements ActionListener {
 	private String bruker;
 	private Rom r;
 	private JTextField textField8;
+	DocumentListener dl = new DocumentListener() {
+		
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			warn();
+		}
+		
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			warn();
+		}
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			warn();
+		}
+		
+		private void warn() {
+			textField5.setText("");
+			Component c = null;
+			JOptionPane.showMessageDialog(c, "Dato eller tidspunkt endret, velg nytt rom!", "Advarsel", JOptionPane.INFORMATION_MESSAGE);
+		}
+	};
 
 	public Avtale(String bruker, final AvtaleLogic al) {
 		this.al = al;
@@ -60,6 +86,7 @@ public class Avtale extends JPanel implements ActionListener {
 		l1.setLabelFor(textField1);
 		p.add(textField1);
 		textField1.addActionListener(this); 
+		textField1.getDocument().addDocumentListener(dl);
 
 		// Starttid
 		JLabel l2 = new JLabel(labels[1], JLabel.TRAILING);
@@ -67,7 +94,8 @@ public class Avtale extends JPanel implements ActionListener {
 		textField2 = new JTextField(10);
 		l2.setLabelFor(textField2);
 		p.add(textField2);
-		textField2.addActionListener(this); 
+		textField2.addActionListener(this);
+		textField2.getDocument().addDocumentListener(dl);
 
 		// Sluttid
 		JLabel l3 = new JLabel(labels[2], JLabel.TRAILING);
@@ -76,6 +104,7 @@ public class Avtale extends JPanel implements ActionListener {
 		l3.setLabelFor(textField3);
 		p.add(textField3);
 		textField3.addActionListener(this); 
+		textField3.getDocument().addDocumentListener(dl);
 
 		// Beskrivelse
 		JLabel l4 = new JLabel(labels[3], JLabel.TRAILING);
