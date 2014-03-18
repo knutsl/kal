@@ -49,22 +49,21 @@ public class Avtale extends JPanel implements ActionListener {
 		public void removeUpdate(DocumentEvent e) {
 			warn();
 		}
-		
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			warn();
 		}
-		
+
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			warn();
 		}
-		
+
 		private void warn() {
-			textField5.setText("");
-			Component c = null;
-			JOptionPane.showMessageDialog(c, "Dato eller tidspunkt endret, velg nytt rom!", "Advarsel", JOptionPane.INFORMATION_MESSAGE);
+			if(!textField5.getText().equals("")) {
+				textField5.setText("");
+				Component c = null;
+				JOptionPane.showMessageDialog(c, "Dato eller tidspunkt endret, velg nytt rom!", "Advarsel", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	};
 
