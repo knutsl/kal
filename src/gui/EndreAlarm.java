@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
@@ -39,9 +40,11 @@ public class EndreAlarm extends JFrame{
 	JLabel tom;
 	String alarmid;
 	String[] info;
+	private JLabel alarmdato;
+	JTextField alarmdatotf;
 	
 	public EndreAlarm(String[] varselid, final EndreAlarmLogic eal){
-		this.setSize(500, 350);
+		this.setSize(500, 400);
 		this.setTitle("Endre Alarm");
 		pane1 = new JPanel(new SpringLayout());
 		pane2 = new JPanel(new SpringLayout());
@@ -69,6 +72,7 @@ public class EndreAlarm extends JFrame{
 				tidspunkttf.setText(info[1]);
 				beskrivelsetf.setText(info[2]);
 				stedtf.setText(info[3]);
+				alarmdatotf.setText(info[6]);
 				alarmtidtf.setText(info[4]);
 			}
 		}
@@ -106,6 +110,12 @@ public class EndreAlarm extends JFrame{
 		pane2.add(stedtf);
 		stedtf.setEditable(false);
 		
+		alarmdato = new JLabel("Alarm starter dato:");
+		pane2.add(alarmdato);
+		
+		alarmdatotf = new JTextField();
+		pane2.add(alarmdatotf);
+		
 		alarmtid = new JLabel("Alarm starter:");
 		pane2.add(alarmtid);
 		
@@ -124,7 +134,7 @@ public class EndreAlarm extends JFrame{
 				6, 6);       //xPad, yPad
 		
 		SpringUtilities.makeCompactGrid(pane2,
-				6, 2, 		 //rows, cols
+				7, 2, 		 //rows, cols
 				6, 6,        //initX, initY
 				6, 6);       //xPad, yPad
 		

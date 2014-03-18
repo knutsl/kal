@@ -89,9 +89,13 @@ public class Hovedside extends JFrame implements ActionListener{
 			endrealarmbox = new EndreAlarm(AvtalerSomHarVaert, ealarml);
 			endrealarmbox.but.addActionListener(this);
 		}else if (arg0.getSource() == endrealarmbox.but){
-			ealarml.updateAlarm(endrealarmbox.alarmtidtf.getText(), endrealarmbox.alarmid, endrealarmbox.info);
-			endrealarmbox.dispose();
-			changeToInbox();
+			try {
+				ealarml.updateAlarm(endrealarmbox.alarmtidtf.getText(), endrealarmbox.alarmid, endrealarmbox.alarmdatotf.getText());
+				endrealarmbox.dispose();
+				changeToInbox();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
