@@ -69,6 +69,7 @@ public class LoginLogic {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		bruker = bruker.substring(0, 1).toUpperCase() + bruker.substring(1).toLowerCase();
 		db.updateQuery("INSERT INTO ansatt VALUES ('" + bruker + "','" + passord + "')");
 		return true;
 	}
