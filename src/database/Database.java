@@ -5,7 +5,7 @@ import java.sql.*;
 public class Database {
 	private static Connection conn = null;
 	private static String url = "jdbc:mysql://mysql.stud.ntnu.no/";
-	private static String dbName = "test";
+	private static String dbName = "simenha_prosjekt";
 	private static String driver = "com.mysql.jdbc.Driver";
 	private static String userName = "simenha_admin";
 	private static String password = "gruppe44";
